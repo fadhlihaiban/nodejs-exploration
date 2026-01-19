@@ -34,4 +34,27 @@ app.post('/users', (req, res) => {
 	});
 });
 
+//Route Hapus Data berdasarkan ID
+app.delete('/users/:id', (req, res) => {
+	const { id } = req.params; // Mengambil ID dari URL
+	db.query("DELETE FROM users WHERE id = ?", [id], (err, result) => {
+		if(err) return res.status(500).json(err);
+		res.json({ message: "Data berhasil dihapus!"});
+	} )
+});
+
+//update
+app.put('/users/:id', (req, res) => {
+	const { id } = req.params;
+	const { nama, email } = req.body;
+	db.query(
+		"UPDATE users SET nama = ?, email = ? WHERE id = ?",
+		[nama, email, id],
+		(err, result) => {
+			if(err) return res.status(500).json(err);
+			res.json({ message: "Data berhasil diupdate!"});
+		}
+	);
+});
+
 app.listen(port, () => console.log(`Server Backend Jalan di Port ${port}`));
